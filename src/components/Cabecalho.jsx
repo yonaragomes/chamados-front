@@ -19,10 +19,10 @@ function Cabecalho() {
   }, [])
 
   return (
+ // mostra o nome só quando usuario existe. sem isso, na primeira renderização usuario.nome quebraria a tela, porque null não tem .nome
     <header>
       <Link to="/">Chamados</Link>
-      {usuario && <span>Olá, {usuario.nome}</span>}
-      // mostra o nome só quando usuario existe. sem isso, na primeira renderização usuario.nome quebraria a tela, porque null não tem .nome
+      {usuario && <span>Olá, {usuario.nome}</span>} 
     </header>
   )
 }

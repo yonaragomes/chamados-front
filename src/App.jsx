@@ -1,20 +1,22 @@
-import { useEffect } from "react"
-import api from "./services/api"
+import { Routes, Route } from "react-router-dom"
+import Cabecalho from "./components/Cabecalho"
+import Home from "./pages/Home"
+import Detalhe from "./pages/Detalhe"
+import FormularioPage from "./pages/FormularioPage"
 
 function App() {
-  useEffect(() => {
-    async function testar() {
-      try {
-        const resposta = await api.get("/tipos")
-        console.log(resposta.data)
-      } catch (erro) {
-        console.log("Erro:", erro)
-      }
-    }
-    testar()
-  }, [])
-
-  return <h1>Teste</h1>
+  return (
+    <>
+      <Cabecalho />
+      <Routes>
+        // liga um caminho a uma tela
+        <Route path="/" element={<Home />} />
+        <Route path="/chamado/:id" element={<Detalhe/>} />
+        <Route path="/novo" element={<FormularioPage />} />
+        <Route path="/editar/:id" element={<FormularioPage />} />
+      </Routes>
+    </>
+  )
 }
 
 export default App

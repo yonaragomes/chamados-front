@@ -49,6 +49,7 @@ function Home() {
         const resposta = await api.get("/chamados", { params })
         setChamados(resposta.data)
       } catch (e) {
+        console.log(e)
         setErro("Não foi possível carregar. Verifique sua chave.")
       } finally {
         setCarregando(false)
@@ -102,13 +103,14 @@ function Home() {
         <p>Nenhum chamado encontrado.</p>
       )}
       {!carregando && !erro && chamados.map((chamado) => (
-        <div key={chamado.id}>
+        <div key={chamado.id}> 
           <h3>{chamado.titulo}</h3>
           <p>{chamado.status} · {chamado.prioridade}</p>
           <Link to={`/chamado/${chamado.id}`}>Ver detalhes</Link>
         </div>
       ))}
     </main>
+
   )
 }
 

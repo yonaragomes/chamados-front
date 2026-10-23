@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import api from "../services/api"
+import { mensagemDeErro } from "../services/erros"
 
 function Home() {
   const [chamados, setChamados] = useState([])
@@ -50,7 +51,7 @@ function Home() {
         setChamados(resposta.data)
       } catch (e) {
         console.log(e)
-        setErro("Não foi possível carregar. Verifique sua chave.")
+        setErro(mensagemDeErro(e, "Não foi possível carregar. Verifique sua chave."))
       } finally {
         setCarregando(false)
       }
@@ -59,9 +60,13 @@ function Home() {
   }, [busca, status, tipo, local, prioridade])
 
   return (
-    <main>
-      <Link to="/novo">+ Abrir chamado</Link>
+  <main>
+    <div className="topo-lista">
+      <h2>Chamados</h2>
+      <Link to="/novo" className="botao">+ Abrir chamado</Link>
+    </div>
 
+    <div className="filtros">
       <input
         type="text"
         placeholder="Buscar por título ou descrição..."
@@ -96,22 +101,29 @@ function Home() {
           <option key={p} value={p}>{p}</option>
         ))}
       </select>
+    </div>
 
-      {carregando && <p>Carregando chamados...</p>}
-      {erro && <p>{erro}</p>}
-      {!carregando && !erro && chamados.length === 0 && (
-        <p>Nenhum chamado encontrado.</p>
-      )}
+    {carregando && <p className="aviso">Carregando chamados...</p>}
+    {erro && <p className="aviso erro">{erro}</p>}
+    {!carregando && !erro && chamados.length === 0 && (
+      <p className="aviso">Nenhum chamado encontrado.</p>
+    )}
+
+    <div className="lista">
       {!carregando && !erro && chamados.map((chamado) => (
-        <div key={chamado.id}> 
-          <h3>{chamado.titulo}</h3>
-          <p>{chamado.status} · {chamado.prioridade}</p>
-          <Link to={`/chamado/${chamado.id}`}>Ver detalhes</Link>
-        </div>
+        <Link to={`/chamado/${chamado.id}`} className="card" key={chamado.id}>
+          <div className="card-topo">
+            <h3>{chamado.titulo}</h3>
+            <span className={`badge ${chamado.status.replace(" ", "-")}`}>
+              {chamado.status}
+            </span>
+          </div>
+          <p className="prio">Prioridade {chamado.prioridade}</p>
+        </Link>
       ))}
-    </main>
-
-  )
+    </div>
+  </main>
+)
 }
 
 export default Home
